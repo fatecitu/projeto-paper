@@ -24,6 +24,13 @@ export default function Login() {
         }
     }
 
+    const validaSenha = (senha) => {
+        if(!senha){setErroSenha('A senha é obrigatória')}
+        else if (senha.length < 6){
+            setErroSenha('A senha deve ter no mínimo 6 caracteres')
+        } else {setErroSenha('')}
+    }
+
     return (
         <>
             <Appbar.Header style={{
@@ -62,7 +69,45 @@ export default function Login() {
                         <HelperText type="error" visible={erroEmail !== ''}>
                             {erroEmail}
                         </HelperText>
+                        <TextInput
+                            label="Senha"
+                            value={senha}
+                            onChangeText={(text) => {
+                                setSenha(text)
+                                validaSenha(text)
+                            }
+                            }
+                            error={erroSenha !== ''}
+                            mode="flat"
+                            style={[erroSenha ?
+                                { backgroundColor: colors.errorContainer } : null]} 
+                            secureTextEntry={mostraSenha ? false : true}
+                            right={
+                                <TextInput.Icon icon={mostraSenha ? 'eye-off' : 'eye'}
+                                onPress={()=> {mostraSenha 
+                                               ? setMostraSenha(false)
+                                               : setMostraSenha(true)}
+                                            }
+                                />
+                            }
+                           />
+                        <HelperText type="error" visible={erroSenha !== ''}>
+                            {erroSenha}
+                        </HelperText>
+                        <Button 
+                            loading={false}
+                            icon="login"
+                            mode="contained"
+                            textColor={colors.onPrimary}
+                            disabled={email==='' ||
+                                      senha==='' ||
+                                      erroEmail !=='' ||
+                                      erroSenha !==''}>Login</Button>
                     </Card.Content>
+                    <Card.Actions>
+                        <Button mode="text">Nova Conta</Button>
+                        <Button mode="outlined">Esqueceu a senha?</Button>
+                    </Card.Actions>
                 </Card>
 
             </View>
